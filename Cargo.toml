@@ -6,7 +6,7 @@ authors = ["Egor Berezovskiy <egor.neon@gmail.com>"]
 [dependencies]
 notify = "4.0.3"
 walkdir = "2.1.4"
-structopt = "0.2.7"
+structopt = "0.2.8"
 structopt-derive = "0.2.8"
 reqwest = "0.8.5"
 serde = "1.0.47"
