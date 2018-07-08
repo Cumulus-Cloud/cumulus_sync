@@ -26,7 +26,7 @@ impl Auth {
   }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(tag = "nodeType")]
 pub enum FsNode {
     FILE {
