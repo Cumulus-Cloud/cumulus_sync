@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Egor Berezovskiy <egor.neon@gmail.com>"]
 
 [dependencies]
-notify = "4.0.3"
+notify = "4.0.4"
 walkdir = "2.1.4"
 structopt = "0.2.10"
 structopt-derive = "0.2.10"
