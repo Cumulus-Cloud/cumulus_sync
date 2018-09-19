@@ -1,4 +1,3 @@
-use reqwest::header::Authorization;
 use reqwest::Client;
 use uuid::Uuid;
 use chrono::NaiveDateTime;
@@ -84,7 +83,7 @@ impl CumulusApi {
 
   pub fn fs_node(&self, path: &str) -> Result<FsNode> {
     let url = format!("{}/api/fs{}", self.server_url, path);
-    let mut response = self.client.get(&url).header(Authorization(self.token.clone())).send()?;
+    let mut response = self.client.get(&url).header("authorization", self.token.clone()).send()?;
     println!("response {:?}", response.status());
     let jsonr = response.json()?;
     Ok(jsonr)

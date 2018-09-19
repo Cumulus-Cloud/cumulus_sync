@@ -10,6 +10,9 @@ extern crate serde_json;
 extern crate error_chain;
 extern crate uuid;
 extern crate chrono;
+#[macro_use]
+extern crate log;
+extern crate env_logger;
 
 pub mod errors;
 pub mod api;
