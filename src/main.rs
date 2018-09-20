@@ -5,17 +5,12 @@ extern crate structopt_derive;
 
 mod cli;
 
-use structopt::StructOpt;
 use cli::Cli;
-use cumulus_sync::errors::Error;
-
-fn start(opt: Cli) -> Result<(), Error> {
-    Ok(cumulus_sync::sync(opt.into())?)
-}
+use structopt::StructOpt;
 
 fn main() {
     let opt = Cli::from_args();
-    if let Err(error) = start(opt) {
+    if let Err(error) = cumulus_sync::sync(opt.into()) {
         println!("Error {:?}", error);
     }
 }

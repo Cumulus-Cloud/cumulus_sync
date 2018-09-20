@@ -1,33 +1,31 @@
 extern crate notify;
-extern crate walkdir;
 extern crate reqwest;
+extern crate walkdir;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde;
-#[macro_use]
-extern crate serde_json;
-#[macro_use]
-extern crate error_chain;
-extern crate uuid;
+// #[macro_use]
+// extern crate serde_json;
 extern crate chrono;
-#[macro_use]
-extern crate log;
+extern crate uuid;
+// #[macro_use]
+// extern crate log;
 extern crate env_logger;
 
-pub mod errors;
 pub mod api;
 
 // use std::fs::File;
-use std::path::Path;
-use std::time::Duration;
-use std::sync::mpsc::channel;
+// use std::path::Path;
+// use std::time::Duration;
+// use std::sync::mpsc::channel;
 
 // use walkdir::WalkDir;
-use notify::{RecommendedWatcher, Watcher, RecursiveMode};
+// use notify::{RecommendedWatcher, Watcher, RecursiveMode};
 
-use api::{CumulusApi, Auth};
+use api::{Auth, CumulusApi};
+// use api::auth_response::AuthResponse;
+use reqwest::Error;
 use std::path::PathBuf;
-use errors::*;
 
 #[derive(Debug)]
 pub struct Options {
@@ -36,22 +34,21 @@ pub struct Options {
     pub folder: PathBuf,
 }
 
-fn watch(path: &Path) -> notify::Result<()> {
-    let (tx, rx) = channel();
-    let mut watcher: RecommendedWatcher = try!(Watcher::new(tx, Duration::from_secs(2)));
-    try!(watcher.watch(path, RecursiveMode::Recursive));
-    loop {
-        match rx.recv() {
-            Ok(event) => println!("{:?}", event),
-            Err(e) => println!("watch error: {:?}", e),
-        }
-    }
-}
+// fn watch(path: &Path) -> notify::Result<()> {
+//     let (tx, rx) = channel();
+//     let mut watcher: RecommendedWatcher = try!(Watcher::new(tx, Duration::from_secs(2)));
+//     try!(watcher.watch(path, RecursiveMode::Recursive));
+//     loop {
+//         match rx.recv() {
+//             Ok(event) => println!("{:?}", event),
+//             Err(e) => println!("watch error: {:?}", e),
+//         }
+//     }
+// }
 
-pub fn sync(options: Options) -> Result<()> {
+pub fn sync(options: Options) -> Result<(), Error> {
     println!("Opt {:?}", options);
-    let client = reqwest::Client::new();
-    let auth = Auth::new(&options.auth.login, &options.auth.password);
+    let auth = Auth::new(options.auth.login, options.auth.password);
     let api = CumulusApi::create(options.server_url, &auth)?;
     let root = api.fs_node("/")?;
     println!("Root {:?}", root);
