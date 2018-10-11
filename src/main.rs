@@ -1,6 +1,6 @@
 extern crate cumulus_sync;
 extern crate structopt;
-#[macro_u&se]
+#[macro_use]
 extern crate structopt_derive;
 
 mod cli;
