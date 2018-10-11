@@ -12,7 +12,7 @@ extern crate uuid;
 // extern crate log;
 extern crate env_logger;
 
-pub mod api;
+mod api;
 
 // use std::fs::File;
 // use std::path::Path;
@@ -22,17 +22,10 @@ pub mod api;
 // use walkdir::WalkDir;
 // use notify::{RecommendedWatcher, Watcher, RecursiveMode};
 
-use api::{Auth, CumulusApi};
-// use api::auth_response::AuthResponse;
-use reqwest::Error;
-use std::path::PathBuf;
+use reqwest::{Client, Error};
+// use std::path::PathBuf;
 
-#[derive(Debug)]
-pub struct Options {
-    pub server_url: String,
-    pub auth: Auth,
-    pub folder: PathBuf,
-}
+use api::cumulus_api::CumulusApi;
 
 // fn watch(path: &Path) -> notify::Result<()> {
 //     let (tx, rx) = channel();
@@ -46,10 +39,8 @@ pub struct Options {
 //     }
 // }
 
-pub fn sync(options: Options) -> Result<(), Error> {
-    println!("Opt {:?}", options);
-    let auth = Auth::new(options.auth.login, options.auth.password);
-    let api = CumulusApi::create(options.server_url, &auth)?;
+pub fn sync(server: String, login: String, password: String) -> Result<(), Error> {
+    let api = CumulusApi::new(Client::new(), server).authenticate(login, password)?;
     let root = api.fs_node("/")?;
     println!("Root {:?}", root);
 
