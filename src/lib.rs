@@ -8,60 +8,29 @@ extern crate serde;
 // extern crate serde_json;
 extern crate chrono;
 extern crate uuid;
-// #[macro_use]
-// extern crate log;
+#[macro_use]
+extern crate log;
 extern crate env_logger;
 
 mod api;
 
-// use std::fs::File;
-// use std::path::Path;
-// use std::time::Duration;
-// use std::sync::mpsc::channel;
-
-// use walkdir::WalkDir;
-// use notify::{RecommendedWatcher, Watcher, RecursiveMode};
-
+use std::path::Path;
+use std::fs::File;
 use reqwest::{Client, Error};
-// use std::path::PathBuf;
 
 use api::cumulus_api::CumulusApi;
 
-// fn watch(path: &Path) -> notify::Result<()> {
-//     let (tx, rx) = channel();
-//     let mut watcher: RecommendedWatcher = try!(Watcher::new(tx, Duration::from_secs(2)));
-//     try!(watcher.watch(path, RecursiveMode::Recursive));
-//     loop {
-//         match rx.recv() {
-//             Ok(event) => println!("{:?}", event),
-//             Err(e) => println!("watch error: {:?}", e),
-//         }
-//     }
-// }
-
 pub fn sync(server: String, login: String, password: String) -> Result<(), Error> {
+    env_logger::init();
+    info!("Sync");
     let api = CumulusApi::new(Client::new(), server).authenticate(login, password)?;
     let root = api.fs_node("/")?;
-    println!("Root {:?}", root);
+    info!("Root {:?}", root);
 
-    /*
-    let file_type = folder.metadata()?.file_type();
-    if file_type.is_dir() {
-      println!("Dir {:?}", file_type.is_dir());
-      //let _ = cumulus_sync::sync(&opt.folder, "http://localhost:9000");
+    let path = Path::new("/Users/egor/projects/cumulus_sync/Cargo.toml");
+    if let Ok(file) = File::open(path) {
+        let fs_node = api.upload("Cargo.toml", file)?;
+        info!("Uploaded {:?}", fs_node);
     }
-    */
-
-    /*
-    for entry in WalkDir::new(path) {
-        let entry = entry.unwrap();
-        let path = entry.path();
-        let file = File::open(&path)?;
-        println!("{}", entry.path().display());
-    }
-    if let Err(e) = watch(path) {
-        println!("error: {:?}", e)
-    }
-    */
     Ok(())
 }

@@ -1,3 +1,4 @@
+use std::fs::File;
 use reqwest::{Client, Error};
 
 use super::fs_node::FsNode;
@@ -10,7 +11,7 @@ struct AuthResponse {
 #[derive(Debug, Serialize, Deserialize)]
 struct Auth {
     login: String,
-    password: String
+    password: String,
 }
 
 pub struct UnautenticatedApi {
@@ -29,7 +30,7 @@ impl UnautenticatedApi {
         Ok(CumulusApi {
             client: self.client,
             server_url: self.server_url,
-            token: response.token
+            token: response.token,
         })
     }
 }
@@ -56,6 +57,19 @@ impl CumulusApi {
             .header("authorization", self.token.clone())
             .send()?;
         println!("response {:?}", response.status());
+        let jsonr = response.json()?;
+        Ok(jsonr)
+    }
+
+    pub fn upload(&self, path: &str, file: File) -> Result<FsNode, Error> {
+        let url = format!("{}/api/upload{}", self.server_url, path);
+        let mut response = self
+            .client
+            .post(&url)
+            .body(file)
+            .header("authorization", self.token.clone())
+            .send()?;
+        info!("upload {:?} {:?}", response.status(), url);
         let jsonr = response.json()?;
         Ok(jsonr)
     }
