@@ -1,4 +1,6 @@
 use std::path::PathBuf;
+use structopt_derive::StructOpt;
+
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "cumulus_sync", about = "Files sync for Cumulus")]

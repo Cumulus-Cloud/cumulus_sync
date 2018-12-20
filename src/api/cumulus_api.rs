@@ -1,7 +1,9 @@
 use std::fs::File;
 use reqwest::{Client, Error};
+use serde_derive::{Deserialize, Serialize};
 
-use super::fs_node::FsNode;
+use log::info;
+use crate::api::fs_node::FsNode;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct AuthResponse {
@@ -56,7 +58,6 @@ impl CumulusApi {
             .get(&url)
             .header("authorization", self.token.clone())
             .send()?;
-        println!("response {:?}", response.status());
         let jsonr = response.json()?;
         Ok(jsonr)
     }

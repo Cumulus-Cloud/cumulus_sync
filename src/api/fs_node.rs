@@ -1,7 +1,8 @@
 use chrono::NaiveDateTime;
 use uuid::Uuid;
+use serde_derive::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(tag = "nodeType", /*rename_all = "camelCase"*/)]
 pub enum FsNode {
     FILE {
