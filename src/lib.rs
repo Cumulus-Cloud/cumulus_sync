@@ -34,8 +34,7 @@ pub fn upload(folder: PathBuf, target: String, server: String, login: String, pa
 }
 
 fn get_relative_path(folder: &Path, path: &Path) -> String {
-    let folder = folder.to_str().unwrap(); // TODO remove unwrap
-    let path = path.to_str().unwrap();  // TODO remove unwrap
-
-    path.replace(folder, "")
+    let folder = folder.to_string_lossy().into_owned();
+    let path = path.to_string_lossy().into_owned();
+    path.replace(&folder, "")
 }
