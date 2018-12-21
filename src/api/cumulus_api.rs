@@ -52,7 +52,7 @@ impl CumulusApi {
     }
 
     pub fn fs_node(&self, path: &str) -> Result<FsNode, Error> {
-        let url = format!("{}/api/fs{}", self.server_url, path);
+        let url = format!("{}/api/fs?path={}", self.server_url, path);
         let mut response = self
             .client
             .get(&url)
@@ -62,8 +62,8 @@ impl CumulusApi {
         Ok(jsonr)
     }
 
-    pub fn upload(&self, path: &str, file: File) -> Result<FsNode, Error> {
-        let url = format!("{}/api/upload{}", self.server_url, path);
+    pub fn upload(&self, target_fs_node: &FsNode, path: &str, file: File) -> Result<FsNode, Error> {
+        let url = format!("{}/api/fs/{}/upload?filename={}", self.server_url, target_fs_node.get_id(), path);
         let mut response = self
             .client
             .post(&url)

@@ -30,6 +30,20 @@ pub enum FsNode {
         creation: NaiveDateTime,
         modification: NaiveDateTime,
         owner: Uuid,
-        content: Vec<FsNode>,
     },
+}
+
+impl FsNode {
+    pub fn get_path(&self) -> String {
+        match self {
+            FsNode::FILE { path, .. } => path.clone(),
+            FsNode::DIRECTORY { path, .. } => path.clone(),
+        }
+    }
+    pub fn get_id(&self) -> Uuid {
+        match self {
+            FsNode::FILE { id, .. } => id.clone(),
+            FsNode::DIRECTORY { id, .. } => id.clone(),
+        }
+    }
 }
