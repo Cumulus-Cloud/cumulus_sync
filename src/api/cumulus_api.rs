@@ -58,8 +58,7 @@ impl CumulusApi {
             .get(&url)
             .header("authorization", self.token.clone())
             .send()?;
-        let jsonr = response.json()?;
-        Ok(jsonr)
+        Ok(response.json()?)
     }
 
     pub fn upload(&self, target_fs_node: &FsNode, path: &str, file: File) -> Result<FsNode, Error> {
@@ -71,7 +70,6 @@ impl CumulusApi {
             .header("authorization", self.token.clone())
             .send()?;
         info!("upload {:?} {:?}", response.status(), url);
-        let jsonr = response.json()?;
-        Ok(jsonr)
+        Ok(response.json()?)
     }
 }
